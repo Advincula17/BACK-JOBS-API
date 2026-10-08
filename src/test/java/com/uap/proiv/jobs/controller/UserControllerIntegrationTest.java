@@ -72,14 +72,22 @@ public class UserControllerIntegrationTest {
     @DisplayName("GET api/users/id/{id} integracion UserController, UserService, UserRepository, mock api externa")
     void getUserById() throws Exception {
         String jsonResponse = """
+        {
+            "page": 1,
+            "per_page": 6,
+            "total": 6,
+            "total_pages": 1,
+            "data": [
                 {
-                   "id": 2,
-                   "email": "juan@gmail.com",
-                   "first_name": "Juan",
-                   "last_name": "Perez",
-                   "avatar": "https://reqres.in/img/faces/2.jpg"
+                    "id": 2,
+                    "email": "juan@gmail.com",
+                    "first_name": "Juan",
+                    "last_name": "Perez",
+                    "avatar": "https://reqres.in/img/faces/2.jpg"
                 }
-                """;
+            ]
+        }
+        """;
         mockWebServer.enqueue(new MockResponse()
                 .setBody(jsonResponse)
                 .setResponseCode(200)
@@ -119,19 +127,18 @@ public class UserControllerIntegrationTest {
         );
 
         String userJson = """
-                {
-                    "id": 1,
-                    "first_name": "Carlos",
-                    "last_name": "Perez"
-¡                }
-                """;
+        {
+            "id": 1,
+            "first_name": "Carlos",
+            "last_name": "Perez"
+        }
+        """;
 
         mockMvc.perform(post("/api/user/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(userJson))
                 .andExpect(status().isOk())
-                .andExpect(content().string(""));
-
+                .andExpect(content().string("User created successfully"));
     }
 
 }
