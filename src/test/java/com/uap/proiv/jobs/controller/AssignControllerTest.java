@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 class AssignControllerTest {
-
+  
     @Mock
     private UserJobAssignedService userJobAssignedService;
 
