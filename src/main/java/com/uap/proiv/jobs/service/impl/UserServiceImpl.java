@@ -6,6 +6,8 @@ import com.uap.proiv.jobs.dto.UserApiResponse;
 import com.uap.proiv.jobs.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.uap.proiv.jobs.dto.UserRequest;
+import com.uap.proiv.jobs.dto.UserCreatedResponse;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -42,5 +44,10 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             throw new RuntimeException("Error al crear el usuario: " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public UserCreatedResponse addUser(UserRequest request) {
+        return userApiRepository.addUser(request);
     }
 }

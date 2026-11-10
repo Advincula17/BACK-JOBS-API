@@ -2,6 +2,11 @@ package com.uap.proiv.jobs.client;
 
 import com.uap.proiv.jobs.dto.User;
 import com.uap.proiv.jobs.dto.UserApiResponse;
+import com.uap.proiv.jobs.dto.UserCreatedResponse;
+import com.uap.proiv.jobs.dto.UserRequest;
+import com.uap.proiv.jobs.dto.UserRequest;
+import com.uap.proiv.jobs.dto.UserCreatedResponse;
+
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -114,6 +119,43 @@ public class UserApiRepository {
             }
         } catch (Exception e) {
             throw new RuntimeException("Error al conectar con la API de usuarios: " + e.getMessage(), e);
+        }
+    }
+
+    public UserCreatedResponse addUser(UserRequest userRequest) {
+        try {
+        Map<String, String> userMap = new HashMap<>();
+        userMap.put("name", userRequest.getName());
+        userMap.put("job", userRequest.getJob());
+
+        String requestBody = objectMapper.writeValueAsString(userMap);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(baseUrl))
+                .header("Accept", "application/json")
+                .header("X-API-KEY", apiKey)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                .build();
+
+        HttpResponse<String> response = httpClient.send(
+                request,
+                HttpResponse.BodyHandlers.ofString()
+        );
+
+        if (response.statusCode() == 201) {
+            return objectMapper.readValue(
+                    response.body(), UserCreatedResponse.class
+            );
+        } else {
+            throw new RuntimeException(
+                    "Error en ReqRes API. Código: " + response.statusCode()
+            );
+        }
+        } catch (Exception e) {
+        throw new RuntimeException(
+                "Error al crear el usuario: " + e.getMessage(), e
+        );
         }
     }
 

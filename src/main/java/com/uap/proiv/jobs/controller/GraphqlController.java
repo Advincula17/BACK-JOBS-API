@@ -49,4 +49,14 @@ public class GraphqlController {
         return jobService.add(request);
     }
 
+    @QueryMapping
+    public Job jobById(@Argument int id) {
+        return jobService.getJobById(id);
+    }
+
+    @MutationMapping
+    public UserCreatedResponse addUser(@Argument UserRequest request) {
+        return userService.addUser(request);
+    }
+
 }
